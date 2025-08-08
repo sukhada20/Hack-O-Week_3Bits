@@ -1,3 +1,5 @@
+Flask
+gunicorn
 keras~=2.12.0rc0
 tensorflow
 numpy~=1.23.5
