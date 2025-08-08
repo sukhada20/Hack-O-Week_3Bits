@@ -17,14 +17,11 @@ function EmotionUpload() {
 
   return (
     <div>
-      <input type="file" onChange={e => setFile(e.target.files[0])} />
-      <button onClick={handleUpload}>Detect Emotion</button>
+      <input type="file" accept="image/*" onChange={e => setFile(e.target.files[0])} />
+      <button onClick={handleUpload} disabled={!file}>Detect Emotion</button>
       <div>Detected Emotion: {emotion}</div>
     </div>
   );
 }
 
 export default EmotionUpload;
-
-
-
