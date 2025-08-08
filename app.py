@@ -1,16 +1,17 @@
 from flask import Flask, request, jsonify
 import cv2
 import numpy as np
-# Load your model here (e.g., with Keras, PyTorch)
+from emotion_recognition_cnn import predict_emotion
+
 app = Flask(__name__)
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    f = request.files['file']
-    img = cv2.imdecode(np.frombuffer(f.read(), np.uint8), cv2.IMREAD_COLOR)
-    # Preprocess img and run through model
-    prediction = your_model.predict(img)  # Replace with actual code
-    return jsonify({'emotion': prediction})
+    file = request.files['file']
+    npimg = np.frombuffer(file.read(), np.uint8)
+    img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
+    emotion = predict_emotion(img)
+    return jsonify({'emotion': emotion})
 
 if __name__ == '__main__':
     app.run(debug=True)
