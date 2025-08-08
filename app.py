@@ -4,9 +4,8 @@ import numpy as np
 from tensorflow.keras.models import load_model
 from PIL import Image
 
-# Load pre-trained emotion detection model (update path as needed)
-MODEL_PATH = 'model/emotion_model.h5'
-FACE_CASCADE_PATH = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+MODEL_PATH = 'model.h5'
+FACE_CASCADE_PATH = 'HaarcascadeclassifierCascadeClassifier.xml'
 
 @st.cache_resource
 def load_emotion_model():
@@ -55,6 +54,10 @@ def main():
 
     FRAME_WINDOW = st.image([])
 
+    # Create persistent placeholders for progress bars
+    prob_container = st.container()
+    prob_bars = [prob_container.progress(0.0, text=f"{emo}: 0.00") for emo in EMOTIONS]
+
     cap = None
     if run:
         cap = cv2.VideoCapture(0)
@@ -66,18 +69,27 @@ def main():
             break
 
         faces = detect_face(frame, face_cascade)
+        face_results = []
+
         for (x, y, w, h) in faces:
             face_img = frame[y:y+h, x:x+w]
             emotion, preds = predict_emotion(face_img, model)
+            face_results.append((emotion, preds, (x, y, w, h)))
+            # Draw face box and label on frame
             cv2.rectangle(frame, (x, y), (x+w, y+h), (255,255,255), 2)
             cv2.putText(frame, emotion, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255,255,255), 2)
 
-            # Show emotion probabilities (UI)
-            st.markdown("#### Emotion Probabilities")
-            for idx, (emo, prob) in enumerate(zip(EMOTIONS, preds)):
-                st.progress(float(prob), text=f"{emo}: {prob:.2f}")
-
         FRAME_WINDOW.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB")
+
+        # Dynamically update emotion probabilities for the first detected face
+        if face_results:
+            emotion, preds, box = face_results[0]
+            for i, (emo, prob) in enumerate(zip(EMOTIONS, preds)):
+                prob_bars[i].progress(float(prob), text=f"{emo}: {prob:.2f}")
+        else:
+            # If no faces, reset bars to 0
+            for i, emo in enumerate(EMOTIONS):
+                prob_bars[i].progress(0.0, text=f"{emo}: 0.00")
 
     if cap:
         cap.release()
