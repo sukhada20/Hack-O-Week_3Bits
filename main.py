@@ -48,39 +48,28 @@ import cv2
 import numpy as np
 
 face_classifier = cv2.CascadeClassifier(r'HaarcascadeclassifierCascadeClassifier.xml')
-classifier =load_model(r'model.h5')
-
+classifier = load_model(r'model.h5')
 emotion_labels = ['Angry','Disgust','Fear','Happy','Neutral', 'Sad', 'Surprise']
 
-cap = cv2.VideoCapture(0)
-
-while True:
-    _, frame = cap.read()
-    labels = []
-    gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+def predict_emotion(img):
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_classifier.detectMultiScale(gray)
+    results = []
 
-    for (x,y,w,h) in faces:
-        cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,255),2)
-        roi_gray = gray[y:y+h,x:x+w]
-        roi_gray = cv2.resize(roi_gray,(48,48),interpolation=cv2.INTER_AREA)
+    for (x, y, w, h) in faces:
+        roi_gray = gray[y:y+h, x:x+w]
+        roi_gray = cv2.resize(roi_gray, (48, 48), interpolation=cv2.INTER_AREA)
 
-
-
-        if np.sum([roi_gray])!=0:
-            roi = roi_gray.astype('float')/255.0
+        if np.sum(roi_gray) != 0:
+            roi = roi_gray.astype('float') / 255.0
             roi = img_to_array(roi)
-            roi = np.expand_dims(roi,axis=0)
+            roi = np.expand_dims(roi, axis=0)
 
             prediction = classifier.predict(roi)[0]
-            label=emotion_labels[prediction.argmax()]
-            label_position = (x,y)
-            cv2.putText(frame,label,label_position,cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
+            label = emotion_labels[prediction.argmax()]
         else:
-            cv2.putText(frame,'No Faces',(30,80),cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
-    cv2.imshow('Emotion Detector',frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+            label = 'No Faces'
+        results.append(label)
 
-cap.release()
-cv2.destroyAllWindows()
+    # If multiple faces, returns first detected for simplicity
+    return results[0] if results else "No Faces"
