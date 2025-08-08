@@ -1,4 +1,4 @@
-# Face Expression Recognition using Deep Learning
+# Emotion Recognition using Deep Learning
 
 This project implements facial emotion recognition using deep learning techniques. It processes images or video frames to detect faces and classify their expressions (e.g., happy, sad, angry, neutral, etc.).
 
