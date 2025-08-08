@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify
 import cv2
 import numpy as np
 from emotion_recognition_cnn import predict_emotion
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app) 
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -14,4 +16,4 @@ def predict():
     return jsonify({'emotion': emotion})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
