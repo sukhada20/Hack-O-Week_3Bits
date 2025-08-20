@@ -1,34 +1,3 @@
-"""
-This code is an implementation of a deep learning model for face expression recognition using the Keras
-framework. The goal of the model is to classify facial expressions into seven categories:
-angry, disgust, fear, happy, neutral, sad, and surprise.
-
-The code first imports the necessary libraries including Keras, matplotlib, and os.
-It then displays a sample of images of the expression "disgust" from the dataset to visualize the data.
-
-The training and validation data are created using Keras' ImageDataGenerator which reads images from the
-given directory and returns batches of images and labels. The train_set and test_set are initialized with
-the parameters such as target size, batch size, and color mode.
-
-The model is built using a sequential model in Keras, with a series of Convolutional Neural Network (CNN)
-layers followed by fully connected layers. The first four layers are CNN layers, each followed by batch
-normalization, activation, max pooling, and dropout. The output of the last CNN layer is then flattened and
-fed into two fully connected layers, each with a batch normalization, activation, dropout, and dense layer.
-The last dense layer has a softmax activation function which returns the probabilities for each class.
-
-The model is then compiled using the Adam optimizer, categorical cross-entropy as the loss function,
-and accuracy as the metric to evaluate the performance.
-
-The model is fitted using the fit_generator() function in Keras. The function takes the training and validation
-data, the number of epochs, and a list of callback functions that monitor the training process, and then
-updates the weights in the model accordingly. In this code, three callback functions are used: ModelCheckpoint,
-EarlyStopping, and ReduceLROnPlateau.
-
-Finally, the code visualizes the loss and accuracy of the model during the training process using the
-matplotlib library. The history object returned by the fit_generator() function is used to plot the
-loss and accuracy curves for both training and validation data.
-
-"""
 import matplotlib.pyplot as plt
 import os
 
