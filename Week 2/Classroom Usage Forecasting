@@ -1,1 +1,7 @@
+##### Week 2:
 
+**Tekler, Z. D., Ono, E., Peng, Y., Zhan, S., Lasternas, B., \& Chong, A. (2022), “ROBOD, Room-level Occupancy and Building Operation Dataset”, Figshare, V7, doi: 10.6084/m9.figshare.19234530.v7**
+
+The ROBOD dataset contains 181 days of comprehensive room-level occupancy and building operation data collected from the net-zero energy SDE4 building at the National University of Singapore. It features 5-minute interval measurements across five specific rooms (lecture halls, offices, and a library), integrating data on indoor environmental conditions (temperature, CO2), Wi-Fi connected device counts, specific energy end-uses (HVAC, lighting, plug loads, fans), and ground-truth occupant counts.
+
+*https://figshare.com/articles/dataset/ROBOD\_Room-level\_Occupancy\_and\_Building\_Operation\_Dataset/19234530*
